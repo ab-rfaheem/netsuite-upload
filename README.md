@@ -164,16 +164,6 @@ Where:
 - PASSWORD is your password (make sure you don't commit this file to source control)
 - ROLE is the numeric NetSuite RoleID for which you have web service/API permissions. You may need to go look this up in NetSuite Setup…Users/Roles…Manage Roles.
 
-### Authentication Option 2: OAuth
-
-Generating the necessary tokens for OAuth is covered in the NetSuite help site. It's not fun.
-
-- If you wish to use OAuth authentication instead of basic authentication you can leave the authentication header blank and use the OAuth settings properties.
-- First, generate an Integration record in NetSuite, make sure the 'token based authentication' scheme is checked, and hang on to the token and secret details.
-- Second, log into a role you wish to use for authentication. From the "manage tokens center", generate a new token and secret using the Integration from the previous step.
-- Input the 4 values from above (NetSuite key and token and Consumer key and token) in the corresponding settings options.
-- Set the `realm` setting equal to your numeric NetSuite account number.
-
 ## settings.json
 
 The following demonstrates all possible settings.
