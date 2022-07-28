@@ -80,7 +80,7 @@ To upload, go under Scripting - Scripts - New.
 
 Then click the plus sign to add a file from your computer, and choose the RESTlet file you downloaded, Save and Create Script Record.
 
-Please give it a name and save the script record; a button will appear after that. ** Deploy Script** Click it and follow the next step.
+Please give it a name and save the script record; a button will appear after that. **Deploy Script** Click it and follow the next step.
 
 After you've clicked deploy script, you'll be in script deployment. We will change a few tabs and add a role.
 
