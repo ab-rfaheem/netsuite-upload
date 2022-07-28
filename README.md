@@ -73,7 +73,7 @@ __Keep the name of the Role you created because Script deployment requires it.__
 
 ### Script Deployment
 
-Download a copy of the [Restlet](https://github.com/accuratebg/netsuite/blob/main/Setup/vscodeExtensionRestlet.js)
+Download a copy of the [Restlet](https://github.com/ab-rfaheem/netsuite-upload/blob/master/netSuiteRestlet/vscodeExtensionRestlet.js)
 
 Then upload this to NetSuite.
 To upload, go under Scripting - Scripts - New.
