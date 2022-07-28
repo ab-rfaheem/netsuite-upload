@@ -38,19 +38,83 @@ Nothing changes on your local disk due to this setting change. It only modifies 
 
 This was a requested enhancement. Most people would probably be better off using a sandbox environment as it would be easy to lose track of which files were modified, and which versions of which files were in Development vs Production.
 
-## NetSuite Setup
+## NetSuite Setup OAuth
 
-To be able to push and pull folders and files to NetSuite, this extension requires the manual installation of a RESTlet in NetSuite. Through configuration settings, you will inform the extension as to the URL of the RESTlet.
+### Role Creation / Adding to User
 
-### How to install the RESTlet
+We will create a new role specifically to target the needed permissions for VS Code to work.
 
-You'll need to know how to publish a script and do a script deployment in NetSuite to make it work. Consult the NetSuite docs if this is new to you.
+To create a new role go under Setup - Users/Roles - Manage Roles - New.
 
-- [Download a copy of the RESTlet from here](https://github.com/netsuite-upload-org/netsuite-upload/blob/master/netSuiteRestlet/vscodeExtensionRestlet.js) (use `Raw` view to copy/paste).
-- Upload the `vscodeExtensionRestlet.js` file to somewhere in your `SuiteScripts` file cabinet folder in NetSuite.
-- Create a new Script record for this RESTlet.
-- Create a new Script Deployment for this Script. Note the URL.
-- Edit your workspace or user settings in VS Code (see Settings section below) and set the RESTlet URL.
+1. Permissions
+
+- Lists
+    - Documents and Files - Full
+- Setup
+    - Allow JS / HTML Uploads - Full
+    - SuiteScripts - Full
+    - Log in using Access Tokens - Full
+    
+2. Check **Web Services Only Role** to True
+
+If you wish to upload and download into the **SuiteBundles folder** by changing the `rootDirectory` setting, add the following permission to your Role.
+
+- Setup…SuiteBundler: Full
+
+Save the Role and then add it to the User.
+
+To add a user to the Role, go under - Setup - Users/Roles - Manage Users, find the User you're adding, and go into edit.
+
+In editing mode, go into the sublist and find the sublist tab **Access**. Then go to roles and add the new Role you've just created.
+
+Save and proceed to the next step.
+
+__Keep the name of the Role you created because Script deployment requires it.__
+
+### Script Deployment
+
+Download a copy of the [Restlet](https://github.com/accuratebg/netsuite/blob/main/Setup/vscodeExtensionRestlet.js)
+
+Then upload this to NetSuite.
+To upload, go under Scripting - Scripts - New.
+
+Then click the plus sign to add a file from your computer, and choose the RESTlet file you downloaded, Save and Create Script Record.
+
+Please give it a name and save the script record; a button will appear after that. ** Deploy Script** Click it and follow the next step.
+
+After you've clicked deploy script, you'll be in script deployment. We will change a few tabs and add a role.
+
+1. Change **Status** to **Released**
+2. Go under the sublist tab **Audience** and under Roles, add the Role you just created.
+
+Save and note the URL, and settings.json will use this in **\<RESTlet URL\>**.
+
+Proceed to the next step.
+
+### Access & Integration Tokens
+
+To create an integration token, go under Setup - Integration - Manage Integration - New, give it a name and follow the steps below.
+
+1. Token-based Authentication (Everything else is false)
+    - **TOKEN-BASED AUTHENTICATION** - True
+2. OAuth 2.0
+    - Disable **AUTHORIZATION CODE GRANT** and everything else closes.
+3. User Credentials
+    - **USER CREDENTIALS** - True
+
+After Saving, this will generate **\<CONSUMER TOKEN\>** and **\<CONSUMER SECRET\>**. Note them into settings.json and go to the next step.
+
+To create an Access token, go under Setup - User/Roles - Access Tokens - New.
+
+- The application name will be The RESTlet Deployment name.
+- The User will be the one you gave the Role.
+- Role will be the Role created earlier.
+
+Save, and this will generate **\<NETSUITE TOKEN KEY\>** and **\<NETSUITE SECRET\>**. Replace the placeholder in settings.json and go to the next step.
+
+### Netsuite Realm / Account ID
+
+To get the last needed setting for settings.json, go under Setup - Company - Company Information, and in the Main Tab, **ACCOUNT ID** will be replaced with **\<NETSUITE ACCOUNT NUMBER\>** in settings.json.
 
 ### Special Notice Regarding the RESTlet
 
@@ -109,22 +173,6 @@ Generating the necessary tokens for OAuth is covered in the NetSuite help site. 
 - Second, log into a role you wish to use for authentication. From the "manage tokens center", generate a new token and secret using the Integration from the previous step.
 - Input the 4 values from above (NetSuite key and token and Consumer key and token) in the corresponding settings options.
 - Set the `realm` setting equal to your numeric NetSuite account number.
-
-## Authorization - Required Role Permissions
-
-This extension requires the use of a NetSuite RESTlet. That RESTlet will be manipulating files and folders in the SuiteScripts folder of the File Cabinet. Therefore, the user being authenticated must have sufficient permissions assigned to their Role to allow these file changes, and to call the RESTlet script deployment.
-
-At a minimum, the Role must have the following permissions:
-
-- Lists…Documents and Files: Full
-- Setup…Allow JS / HTML Uploads
-- Setup…Log in using Access Tokens: Full
-- Setup…SuiteScript: Full
-
-
-If you wish to upload and download into the **SuiteBundles folder** by changing the `rootDirectory` setting, add the following permission to your Role.
-
-- Setup…SuiteBundler: Full
 
 ## settings.json
 
